@@ -3,6 +3,7 @@ package com.studentscheduler;
 import static com.studentscheduler.DateUtils.chooseTime;
 
 import android.app.PendingIntent;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -39,7 +40,15 @@ public class CourseDetailsActivity extends AppCompatActivity {
     private FloatingActionButton fab;
     private Integer selectedRV = (R.id.rd_assessments);
     private TextView noItems;
-
+    // Course
+    private EditText etTitleC;
+    private EditText etStatusC;
+    private TextView tvIdC;
+    private TextView tvStartDateC;
+    private TextView tvEndDateC;
+    private SwitchCompat swStartAlertC;
+    private SwitchCompat swEndAlertC;
+    private Button btnEditC;
     // Assessment views
     private LinearLayout llAddAssessment;
     private Button btnShowAssessment;
@@ -50,6 +59,8 @@ public class CourseDetailsActivity extends AppCompatActivity {
     private RadioGroup rgType;
     private ArrayList<Assessment> assessments;
     private AssessmentAdapter assessmentAdapter;
+    private SwitchCompat swStartAlertA;
+    private SwitchCompat swEndAlertA;
 
     // Instructor views
     private LinearLayout llAddInstructor;
@@ -70,8 +81,6 @@ public class CourseDetailsActivity extends AppCompatActivity {
     private EditText etNote;
     private ArrayList<Note> notes;
     private NoteAdapter noteAdapter;
-    private SwitchCompat swStartDate;
-    private SwitchCompat swEndDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +88,8 @@ public class CourseDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_course_details);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         cid = getIntent().getStringExtra("CID");
+        Calendar sdi = Calendar.getInstance();
+        Calendar edi = Calendar.getInstance();
 
         rgViewSelect = findViewById(R.id.rg_group_view);
         rvAIN = findViewById(R.id.rv_ain);
@@ -87,18 +98,93 @@ public class CourseDetailsActivity extends AppCompatActivity {
         rdNotes = findViewById(R.id.rd_notes);
         fab = findViewById(R.id.fab_add_ain);
         noItems = findViewById(R.id.no_items);
-        swStartDate = findViewById(R.id.sw_alert_start);
-        swEndDate = findViewById(R.id.sw_alert_end);
+
+        // Course
+        etTitleC = findViewById(R.id.et_title_c);
+        etStatusC = findViewById(R.id.et_status_c);
+        tvIdC = findViewById(R.id.tv_id_c);
+        tvStartDateC = findViewById(R.id.tv_start_date_c);
+        tvEndDateC = findViewById(R.id.tv_end_date_c);
+        swStartAlertC = findViewById(R.id.sw_alert_start_c);
+        swEndAlertC = findViewById(R.id.sw_alert_end_c);
+        btnEditC = findViewById(R.id.btn_edit_c);
+        Course course = DatabaseManager.getCourse(this, cid);
+
+        tvIdC.setText(course.getCID());
+        etTitleC.setText(course.getTitle());
+        etStatusC.setText(course.getStatus());
+        tvStartDateC.setText(course.getSdate());
+        tvEndDateC.setText(course.getEdate());
+        swStartAlertC.setChecked(course.getsAlert() == 1);
+        swEndAlertC.setChecked(course.geteAlert() == 1);
+
+        tvStartDateC.setOnClickListener(v -> {
+            if (etTitleC.isEnabled()) {
+                DateUtils.chooseDate(this, tvStartDateC, sdi);
+            }
+        });
+        tvEndDateC.setOnClickListener(v -> {
+            if (etTitleC.isEnabled()) {
+                DateUtils.chooseDate(this, tvEndDateC, edi);
+            }
+        });
+        btnEditC.setOnClickListener(v -> {
+            if (!etTitleC.isEnabled()) {
+                etTitleC.setEnabled(true);
+                etStatusC.setEnabled(true);
+                swStartAlertC.setEnabled(true);
+                swEndAlertC.setEnabled(true);
+                etTitleC.requestFocus();
+                btnEditC.setText("Save");
+            } else {
+                etTitleC.setEnabled(false);
+                etStatusC.setEnabled(false);
+                swStartAlertC.setEnabled(false);
+                swEndAlertC.setEnabled(false);
+                btnEditC.setText("Edit");
+                int salt = (swStartAlertC.isChecked()) ? 1 : 0;
+                int ealt = (swEndAlertC.isChecked()) ? 1 : 0;
+                DatabaseManager DB = new DatabaseManager(this);
+                ContentValues values = new ContentValues();
+                values.put("Title", String.valueOf(etTitleC.getText()));
+                values.put("StartDate", String.valueOf(tvStartDateC.getText()));
+                values.put("EndDate", String.valueOf(tvEndDateC.getText()));
+                values.put("CourseStatus", String.valueOf(etStatusC.getText()));
+                values.put("StartAlert", salt);
+                values.put("EndAlert", ealt);
+                if (DB.updateData(course.getCID(), DatabaseManager.TABLE_COURSE, values)) {
+                    int _cid = Integer.parseInt(cid);
+                    if (salt == 0)
+                        DateUtils.cancelAlarm(this, _cid + 20000);
+                    else
+                        DateUtils.scheduleAlarm(this, "Course Started: " + course.getTitle(), _cid + 20000, sdi);
+                    if (ealt == 0)
+                        DateUtils.cancelAlarm(this, _cid + 30000);
+                    else
+                        DateUtils.scheduleAlarm(this, "Course Ended: " + course.getTitle(), _cid + 30000, edi);
+                    Toast.makeText(this, "Success Update!", Toast.LENGTH_SHORT).show();
+                } else Toast.makeText(this, "Failed!", Toast.LENGTH_SHORT).show();
+                DB.close();
+            }
+        });
+        swStartAlertC.setOnCheckedChangeListener((compoundButton, b) -> {
+            if (b) chooseTime(this, sdi, swStartAlertC);
+        });
+        swEndAlertC.setOnCheckedChangeListener((compoundButton, b) -> {
+            if (b) chooseTime(this, edi, swEndAlertC);
+        });
 
         // Assessment
         btnShowAssessment = findViewById(R.id.btn_showform_assessment);
         btnAddAssessment = findViewById(R.id.btn_add_assessment);
         btnAddAssessmentCancel = findViewById(R.id.btn_cancel_assessment);
-        etTitle = findViewById(R.id.et_title);
-        sDate = findViewById(R.id.tv_start_date);
-        eDate = findViewById(R.id.tv_end_date);
+        etTitle = findViewById(R.id.et_title_a);
+        sDate = findViewById(R.id.tv_start_date_a);
+        eDate = findViewById(R.id.tv_end_date_a);
         rgType = findViewById(R.id.rg_group_type);
         llAddAssessment = findViewById(R.id.lyt_add_assessment);
+        swStartAlertA = findViewById(R.id.sw_alert_start_a);
+        swEndAlertA = findViewById(R.id.sw_alert_end_a);
 
         llAddAssessment.setVisibility(View.GONE);
         assessments = new ArrayList<>();
@@ -107,49 +193,50 @@ public class CourseDetailsActivity extends AppCompatActivity {
         btnShowAssessment.setOnClickListener(v -> {
             llAddAssessment.setVisibility(View.VISIBLE);
         });
-        btnAddAssessmentCancel.setOnClickListener(v -> llAddAssessment.setVisibility(View.GONE));
-
-        Calendar sdi = Calendar.getInstance();
-        Calendar edi = Calendar.getInstance();
+        btnAddAssessmentCancel.setOnClickListener(v -> showFAB(true, llAddAssessment));
 
         btnAddAssessment.setOnClickListener(v -> {
-            DB = new DatabaseManager(this);
-            String _title = String.valueOf(etTitle.getText());
-            String _sdate = String.valueOf(sDate.getText());
-            String _edate = String.valueOf(eDate.getText());
-            int _salert = swStartDate.isChecked() ? 1 : 0;
-            int _ealert = swEndDate.isChecked() ? 1 : 0;
-            if (DB.insertIntoAssessment(_title, _sdate, _edate, chosenType, _salert, _ealert)) {
-                String _aid = DB.getLastInsertedRowID(DatabaseManager.TABLE_ASSESSMENTS);
-                if (DB.insertIntoCourseAssessments(cid, _aid)) {
-                    assessments.add(new Assessment(_aid, _title, _sdate, _edate, chosenType, _salert, _ealert));
-                    assessmentAdapter.notifyItemInserted(assessments.size());
-                    Intent intent = new Intent(this, AlarmReceiver.class);
-                    if (swStartDate.isChecked()) {
-                        int nid = Integer.parseInt(_aid) + 40000;
-                        intent.putExtra("title", "Assessment Started: " + _title);
-                        intent.putExtra("nid", nid);
-                        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, nid, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-                        DateUtils.scheduleAlarm(this, pendingIntent, sdi);
+            if (DatabaseManager.getAssessmentCount(this, course.getCID()) < 5) {
+                DB = new DatabaseManager(this);
+                String _title = String.valueOf(etTitle.getText());
+                String _sdate = String.valueOf(sDate.getText());
+                String _edate = String.valueOf(eDate.getText());
+                int _salert = swStartAlertA.isChecked() ? 1 : 0;
+                int _ealert = swEndAlertA.isChecked() ? 1 : 0;
+                if (DB.insertIntoAssessment(_title, _sdate, _edate, chosenType, _salert, _ealert)) {
+                    String _aid = DB.getLastInsertedRowID(DatabaseManager.TABLE_ASSESSMENTS);
+                    if (DB.insertIntoCourseAssessments(cid, _aid)) {
+                        assessments.add(new Assessment(_aid, _title, _sdate, _edate, chosenType, _salert, _ealert));
+                        assessmentAdapter.notifyItemInserted(assessments.size());
+                        Intent intent = new Intent(this, AlarmReceiver.class);
+                        if (swStartAlertA.isChecked()) {
+                            int nid = Integer.parseInt(_aid) + 40000;
+                            intent.putExtra("title", "Assessment Started: " + _title);
+                            intent.putExtra("nid", nid);
+                            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, nid, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+                            DateUtils.scheduleAlarm(this, pendingIntent, sdi);
+                        }
+                        if (swEndAlertA.isChecked()) {
+                            int nid = Integer.parseInt(_aid) + 50000;
+                            intent.putExtra("title", "Assessment Ended: " + _title);
+                            intent.putExtra("nid", nid);
+                            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, nid, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+                            DateUtils.scheduleAlarm(this, pendingIntent, edi);
+                        }
+                        showToast("Assessment Added");
+                    } else {
+                        DB.deleteAssessment(_aid);
+                        showToast("Failed");
                     }
-                    if (swEndDate.isChecked()) {
-                        int nid = Integer.parseInt(_aid) + 50000;
-                        intent.putExtra("title", "Assessment Ended: " + _title);
-                        intent.putExtra("nid", nid);
-                        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, nid, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-                        DateUtils.scheduleAlarm(this, pendingIntent, edi);
-                    }
-                    showToast("Assessment Added");
-                } else {
-                    DB.deleteAssessment(_aid);
-                    showToast("Failed");
-                }
-            } else showToast("Failed");
-            DB.close();
-            showFAB(true, llAddAssessment);
-            ExtraUtils.updateNoItemsMessage(assessments, noItems);
-            swStartDate.setChecked(false);
-            swEndDate.setChecked(false);
+                } else showToast("Failed");
+                DB.close();
+                showFAB(true, llAddAssessment);
+                ExtraUtils.updateNoItemsMessage(assessments, noItems);
+                swStartAlertA.setChecked(false);
+                swEndAlertA.setChecked(false);
+            } else {
+                Toast.makeText(this, "Failed: Assessments are full!", Toast.LENGTH_SHORT).show();
+            }
         });
 
         rgType.setOnCheckedChangeListener((radioGroup, i) -> {
@@ -276,11 +363,11 @@ public class CourseDetailsActivity extends AppCompatActivity {
         loadInstructors();
         loadNotes();
         ExtraUtils.updateNoItemsMessage(assessments, noItems);
-        swStartDate.setOnCheckedChangeListener((compoundButton, b) -> {
-            if (b) chooseTime(this, sdi, swStartDate);
+        swStartAlertA.setOnCheckedChangeListener((compoundButton, b) -> {
+            if (b) chooseTime(this, sdi, swStartAlertA);
         });
-        swEndDate.setOnCheckedChangeListener((compoundButton, b) -> {
-            if (b) chooseTime(this, edi, swEndDate);
+        swEndAlertA.setOnCheckedChangeListener((compoundButton, b) -> {
+            if (b) chooseTime(this, edi, swEndAlertA);
         });
     }
 

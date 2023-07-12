@@ -5,7 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.widget.Toast;
+
+import java.util.ArrayList;
 
 public class DatabaseManager extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 1;
@@ -120,6 +121,95 @@ public class DatabaseManager extends SQLiteOpenHelper {
         return (db.insert(TABLE_TERM, null, values) != -1);
     }
 
+    public static Term getTerm(Context context, String _tid) {
+        Term term = null;
+        DatabaseManager DB = new DatabaseManager(context);
+        String query = "Select * From " + DatabaseManager.TABLE_TERM + "\n" +
+                "       Where TID = " + _tid;
+        Cursor termData = DB.runQuery(query);
+        if (termData != null) {
+            if (termData.moveToFirst()) {
+                String name;
+                String sdate;
+                String edate;
+                int salert;
+                int ealert;
+                int titleIndex = termData.getColumnIndex("Title");
+                int sdateIndex = termData.getColumnIndex("StartDate");
+                int edateIndex = termData.getColumnIndex("EndDate");
+                int salertIndex = termData.getColumnIndex("StartAlert");
+                int ealertIndex = termData.getColumnIndex("EndAlert");
+                name = "None";
+                sdate = "None";
+                edate = "None";
+                salert = 0;
+                ealert = 0;
+                if (titleIndex != -1)
+                    name = termData.getString(titleIndex);
+                if (sdateIndex != -1)
+                    sdate = termData.getString(sdateIndex);
+                if (edateIndex != -1)
+                    edate = termData.getString(edateIndex);
+                if (salertIndex != -1)
+                    salert = termData.getInt(salertIndex);
+                if (ealertIndex != -1)
+                    ealert = termData.getInt(ealertIndex);
+                if (!name.equals("None")) {
+                    term = new Term(_tid, name, sdate, edate, salert, ealert);
+                }
+            }
+            termData.close();
+        }
+        DB.close();
+        return term;
+    }
+
+    public static void loadTerms(Context context, ArrayList<Term> terms) {
+        DatabaseManager DB = new DatabaseManager(context);
+        String query = "Select * From " + DatabaseManager.TABLE_TERM;
+        Cursor termData = DB.runQuery(query);
+        if (termData != null && termData.moveToFirst()) {
+            String tid;
+            String name;
+            String sdate;
+            String edate;
+            int salert;
+            int ealert;
+            int idIndex = termData.getColumnIndex("TID");
+            int titleIndex = termData.getColumnIndex("Title");
+            int sdateIndex = termData.getColumnIndex("StartDate");
+            int edateIndex = termData.getColumnIndex("EndDate");
+            int salertIndex = termData.getColumnIndex("StartAlert");
+            int ealertIndex = termData.getColumnIndex("EndAlert");
+            do {
+                tid = "None";
+                name = "None";
+                sdate = "None";
+                edate = "None";
+                salert = 0;
+                ealert = 0;
+                if (idIndex != -1)
+                    tid = termData.getString(idIndex);
+                if (titleIndex != -1)
+                    name = termData.getString(titleIndex);
+                if (sdateIndex != -1)
+                    sdate = termData.getString(sdateIndex);
+                if (edateIndex != -1)
+                    edate = termData.getString(edateIndex);
+                if (salertIndex != -1)
+                    salert = termData.getInt(salertIndex);
+                if (ealertIndex != -1)
+                    ealert = termData.getInt(ealertIndex);
+                if (!name.equals("None")) {
+                    terms.add(new Term(tid, name, sdate, edate, salert, ealert));
+                }
+            } while (termData.moveToNext());
+        }
+        if (termData != null)
+            termData.close();
+        DB.close();
+    }
+
     public boolean deleteTerm(String id) {
         SQLiteDatabase db = this.getWritableDatabase();
         return (db.delete(TABLE_TERM, "TID = ?", new String[]{id}) != -1);
@@ -136,6 +226,97 @@ public class DatabaseManager extends SQLiteOpenHelper {
         values.put("StartAlert", salert);
         values.put("EndAlert", ealert);
         return (db.insert(TABLE_COURSE, null, values) != -1);
+    }
+
+    public static Course getCourse(Context context, String _cid) {
+        Course course = null;
+        DatabaseManager DB = new DatabaseManager(context);
+        String query = "Select * From " + TABLE_COURSE + "\n" +
+                "       Where CID = " + _cid;
+        Cursor termData = DB.runQuery(query);
+        if (termData != null) {
+            if (termData.moveToFirst()) {
+                String cid, name, sdate, edate, status;
+                int salert, ealert;
+                int idIndex = termData.getColumnIndex("CID");
+                int titleIndex = termData.getColumnIndex("Title");
+                int sdateIndex = termData.getColumnIndex("StartDate");
+                int edateIndex = termData.getColumnIndex("EndDate");
+                int statusIndex = termData.getColumnIndex("CourseStatus");
+                int salertIndex = termData.getColumnIndex("StartAlert");
+                int ealertIndex = termData.getColumnIndex("EndAlert");
+
+                cid = name = sdate = edate = status = "None";
+                salert = ealert = 0;
+                if (idIndex != -1)
+                    cid = termData.getString(idIndex);
+                if (titleIndex != -1)
+                    name = termData.getString(titleIndex);
+                if (sdateIndex != -1)
+                    sdate = termData.getString(sdateIndex);
+                if (edateIndex != -1)
+                    edate = termData.getString(edateIndex);
+                if (statusIndex != -1)
+                    status = termData.getString(statusIndex);
+                if (salertIndex != -1)
+                    salert = termData.getInt(salertIndex);
+                if (ealertIndex != -1)
+                    ealert = termData.getInt(ealertIndex);
+                if (!cid.equals("None")) {
+                    course = new Course(cid, name, sdate, edate, status, salert, ealert);
+                }
+            }
+            termData.close();
+        }
+        DB.close();
+        return course;
+    }
+
+    public static void loadCourses(Context context, ArrayList<Course> courses, String tid) {
+        DatabaseManager DB = new DatabaseManager(context);
+        String query = "Select C.* from COURSE C ;";
+        if (tid != null) {
+            query = "Select C.* from COURSE C " +
+                    "       Join TERM_COURSES TC on TC.CID = C.CID " +
+                    "       Where TC.TID = '" + tid + "';";
+        }
+
+        Cursor termData = DB.runQuery(query);
+        if (termData != null && termData.moveToFirst()) {
+            String cid, name, sdate, edate, status;
+            int salert, ealert;
+            int idIndex = termData.getColumnIndex("CID");
+            int titleIndex = termData.getColumnIndex("Title");
+            int sdateIndex = termData.getColumnIndex("StartDate");
+            int edateIndex = termData.getColumnIndex("EndDate");
+            int statusIndex = termData.getColumnIndex("CourseStatus");
+            int salertIndex = termData.getColumnIndex("StartAlert");
+            int ealertIndex = termData.getColumnIndex("EndAlert");
+            do {
+                cid = name = sdate = edate = status = "None";
+                salert = ealert = 0;
+                if (idIndex != -1)
+                    cid = termData.getString(idIndex);
+                if (titleIndex != -1)
+                    name = termData.getString(titleIndex);
+                if (sdateIndex != -1)
+                    sdate = termData.getString(sdateIndex);
+                if (edateIndex != -1)
+                    edate = termData.getString(edateIndex);
+                if (statusIndex != -1)
+                    status = termData.getString(statusIndex);
+                if (salertIndex != -1)
+                    salert = termData.getInt(salertIndex);
+                if (ealertIndex != -1)
+                    ealert = termData.getInt(ealertIndex);
+                if (!cid.equals("None")) {
+                    courses.add(new Course(cid, name, sdate, edate, status, salert, ealert));
+                }
+            } while (termData.moveToNext());
+        }
+        if (termData != null)
+            termData.close();
+        DB.close();
     }
 
     public boolean deleteCourse(String id) {
@@ -172,9 +353,83 @@ public class DatabaseManager extends SQLiteOpenHelper {
         return (db.insert(TABLE_ASSESSMENTS, null, values) != -1);
     }
 
+    public static Assessment getAssessment(Context context, String _aid) {
+        Assessment assessment = null;
+        DatabaseManager DB = new DatabaseManager(context);
+        String query = "Select * From " + TABLE_ASSESSMENTS + "\n" +
+                "       Where AID = " + _aid;
+        Cursor termData = DB.runQuery(query);
+        if (termData != null) {
+            if (termData.moveToFirst()) {
+                String title, sdate, edate, type;
+                int salert, ealert;
+                int titleIndex = termData.getColumnIndex("Title");
+                int sdateIndex = termData.getColumnIndex("StartDate");
+                int edateIndex = termData.getColumnIndex("EndDate");
+                int statusIndex = termData.getColumnIndex("Type");
+                int salertIndex = termData.getColumnIndex("StartAlert");
+                int ealertIndex = termData.getColumnIndex("EndAlert");
+
+                title = sdate = edate = type = "None";
+                salert = ealert = 0;
+                if (titleIndex != -1)
+                    title = termData.getString(titleIndex);
+                if (sdateIndex != -1)
+                    sdate = termData.getString(sdateIndex);
+                if (edateIndex != -1)
+                    edate = termData.getString(edateIndex);
+                if (statusIndex != -1)
+                    type = termData.getString(statusIndex);
+                if (salertIndex != -1)
+                    salert = termData.getInt(salertIndex);
+                if (ealertIndex != -1)
+                    ealert = termData.getInt(ealertIndex);
+                if (!title.equals("None")) {
+                    assessment = new Assessment(_aid, title, sdate, edate, type, salert, ealert);
+                }
+            }
+            termData.close();
+        }
+        DB.close();
+        return assessment;
+    }
+
+    public static int getAssessmentCount(Context context, String cid) {
+        int count = 0;
+        DatabaseManager DB = new DatabaseManager(context);
+        String query = "Select Count(*) as Counter From " + TABLE_COURSE_ASSESSMENTS + " AS TC\n" +
+                "       Where TC.CID = " + cid;
+        Cursor termData = DB.runQuery(query);
+        if (termData != null) {
+            if (termData.moveToFirst()) {
+                count = termData.getInt(0);
+            }
+            termData.close();
+        }
+        DB.close();
+        return count;
+    }
+
+    public static int getTableCount(Context context, String tableName) {
+        int count = 0;
+        DatabaseManager DB = new DatabaseManager(context);
+        String query = "Select Count(*) AS COUNT From " + tableName + ";";
+        Cursor termData = DB.runQuery(query);
+        if (termData != null) {
+            if (termData.moveToFirst()) {
+                count = termData.getInt(0);
+            }
+            termData.close();
+        }
+        DB.close();
+        return count;
+    }
+
     public boolean deleteAssessment(String id) {
         SQLiteDatabase db = this.getWritableDatabase();
-        return (db.delete(TABLE_ASSESSMENTS, "AID = ?", new String[]{id}) != -1);
+        if (deleteCourseAssessments(id))
+            return (db.delete(TABLE_ASSESSMENTS, "AID = ?", new String[]{id}) != -1);
+        else return false;
     }
 
     // Course Assessment
@@ -201,9 +456,35 @@ public class DatabaseManager extends SQLiteOpenHelper {
         return (db.insert(TABLE_INSTRUCTOR, null, values) != -1);
     }
 
+    public static Instructor getInstructor(Context context, String _iid) {
+        Instructor instructor = null;
+        DatabaseManager DB = new DatabaseManager(context);
+        String query = "Select * From " + TABLE_INSTRUCTOR + "\n" +
+                "       Where IID = " + _iid;
+        Cursor termData = DB.runQuery(query);
+        if (termData != null) {
+            if (termData.moveToFirst()) {
+                String name = "None", phone = "None", email = "None";
+                int nameIndex = termData.getColumnIndex("FullName");
+                int phoneIndex = termData.getColumnIndex("Phone");
+                int emailIndex = termData.getColumnIndex("Email");
+
+                if (nameIndex != -1) name = termData.getString(nameIndex);
+                if (phoneIndex != -1) phone = termData.getString(phoneIndex);
+                if (emailIndex != -1) email = termData.getString(emailIndex);
+                if (!name.equals("None")) instructor = new Instructor(_iid, name, phone, email);
+            }
+            termData.close();
+        }
+        DB.close();
+        return instructor;
+    }
+
     public boolean deleteInstructor(String id) {
         SQLiteDatabase db = this.getWritableDatabase();
-        return (db.delete(TABLE_INSTRUCTOR, "IID = ?", new String[]{id}) != -1);
+        if (deleteCourseInstructors(id))
+            return (db.delete(TABLE_INSTRUCTOR, "IID = ?", new String[]{id}) != -1);
+        else return false;
     }
 
     // Course Instructor
@@ -230,7 +511,9 @@ public class DatabaseManager extends SQLiteOpenHelper {
 
     public boolean deleteNote(String id) {
         SQLiteDatabase db = this.getWritableDatabase();
-        return (db.delete(TABLE_NOTES, "NID = ?", new String[]{id}) != -1);
+        if (deleteCourseNotes(id))
+            return (db.delete(TABLE_NOTES, "NID = ?", new String[]{id}) != -1);
+        else return false;
     }
 
     // Course Note

@@ -55,8 +55,8 @@
                     android:layout_height="wrap_content"
                     android:text="Title: " />
 
-                <EditText
-                    android:id="@+id/et_title"
+                <TextView
+                    android:id="@+id/tv_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/transparent"
@@ -70,104 +70,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:theme="@style/FontColorDate">
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Start Date"
-                    android:textColor="@color/deep_yellow"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:id="@+id/tv_sdate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="-" />
-            </LinearLayout>
-
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/sw_alert_start"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:drawableStart="@drawable/notifications_active_15"
-                android:enabled="false"
-                android:gravity="center" />
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="End Date"
-                    android:textColor="@color/deep_yellow"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:id="@+id/tv_edate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="-" />
-            </LinearLayout>
-
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/sw_alert_end"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:drawableStart="@drawable/notifications_active_15"
-                android:enabled="false"
-                android:gravity="center" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:theme="@style/FontColorDate">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Status: "
-                android:textColor="@color/deep_yellow" />
-
-            <EditText
-                android:id="@+id/et_status"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:layout_weight="1"
-                android:background="@color/transparent"
-                android:enabled="false"
-                android:inputType="textMultiLine"
-                android:text="-"
-                android:textColor="#DBE0E4" />
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_margin="5dp"
-            android:background="#80A1A1A1" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <Button
@@ -177,17 +79,6 @@
                 android:layout_marginEnd="8dp"
                 android:layout_weight="1"
                 android:text="Details"
-                android:textSize="11sp"
-                app:backgroundTint="@color/blue_primary"
-                app:cornerRadius="10dp" />
-
-            <Button
-                android:id="@+id/btn_edit"
-                android:layout_width="0dp"
-                android:layout_height="45dp"
-                android:layout_marginEnd="8dp"
-                android:layout_weight="1"
-                android:text="Edit"
                 android:textSize="11sp"
                 app:backgroundTint="@color/blue_primary"
                 app:cornerRadius="10dp" />

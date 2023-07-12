@@ -138,54 +138,8 @@ public class TermsActivity extends AppCompatActivity {
         swEndDate.setOnCheckedChangeListener((compoundButton, b) -> {
             if (b) chooseTime(this, edi, swEndDate);
         });
-        loadTerms();
-    }
-
-    public void loadTerms() {
-        DB = new DatabaseManager(this);
-        String query = "Select * From " + DatabaseManager.TABLE_TERM;
-        Cursor termData = DB.runQuery(query);
-        if (termData != null && termData.moveToFirst()) {
-            String tid;
-            String name;
-            String sdate;
-            String edate;
-            int salert;
-            int ealert;
-            int idIndex = termData.getColumnIndex("TID");
-            int titleIndex = termData.getColumnIndex("Title");
-            int sdateIndex = termData.getColumnIndex("StartDate");
-            int edateIndex = termData.getColumnIndex("EndDate");
-            int salertIndex = termData.getColumnIndex("StartAlert");
-            int ealertIndex = termData.getColumnIndex("EndAlert");
-            do {
-                tid = "None";
-                name = "None";
-                sdate = "None";
-                edate = "None";
-                salert = 0;
-                ealert = 0;
-                if (idIndex != -1)
-                    tid = termData.getString(idIndex);
-                if (titleIndex != -1)
-                    name = termData.getString(titleIndex);
-                if (sdateIndex != -1)
-                    sdate = termData.getString(sdateIndex);
-                if (edateIndex != -1)
-                    edate = termData.getString(edateIndex);
-                if (salertIndex != -1)
-                    salert = termData.getInt(salertIndex);
-                if (ealertIndex != -1)
-                    ealert = termData.getInt(ealertIndex);
-                if (!name.equals("None")) {
-                    terms.add(new Term(tid, name, sdate, edate, salert, ealert));
-                    termAdapter.notifyItemInserted(terms.size());
-                }
-            } while (termData.moveToNext());
-        }
-        if (termData != null)
-            termData.close();
-        DB.close();
+        DatabaseManager.loadTerms(this, terms);
+        termAdapter.notifyItemRangeInserted(0, terms.size());
         ExtraUtils.updateNoItemsMessage(terms, noItems);
     }
 

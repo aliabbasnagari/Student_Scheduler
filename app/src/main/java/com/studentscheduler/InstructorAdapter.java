@@ -36,8 +36,6 @@ public class InstructorAdapter extends RecyclerView.Adapter<InstructorAdapter.In
         Instructor instructor = instructors.get(position);
 
         holder.tvName.setText(instructor.getName());
-        holder.tvPhone.setText(instructor.getPhone());
-        holder.tvEmail.setText(instructor.getEmail());
         holder.tvID.setText(instructor.getIID());
 
         holder.btnDelete.setOnClickListener(v -> {
@@ -51,6 +49,8 @@ public class InstructorAdapter extends RecyclerView.Adapter<InstructorAdapter.In
             DB.close();
             ExtraUtils.updateNoItemsMessage(instructors, ((CourseDetailsActivity) context).findViewById(R.id.no_items));
         });
+
+        holder.btnDetails.setOnClickListener(v -> context.startActivity(new Intent(context, InstructorDetailsActivity.class).putExtra("IID", instructor.getIID())));
     }
 
     @Override
@@ -62,19 +62,15 @@ public class InstructorAdapter extends RecyclerView.Adapter<InstructorAdapter.In
 
         private TextView tvID;
         private TextView tvName;
-        private TextView tvPhone;
-        private TextView tvEmail;
         private Button btnDelete;
         private Button btnDetails;
 
         public InstructorViewHolder(View itemView) {
             super(itemView);
-            tvID = itemView.findViewById(R.id.tv_id);
-            tvName = itemView.findViewById(R.id.tv_name);
-            tvPhone = itemView.findViewById(R.id.tv_phone);
-            tvEmail = itemView.findViewById(R.id.tv_email);
-            btnDelete = itemView.findViewById(R.id.btn_delete);
-            btnDetails = itemView.findViewById(R.id.btn_details);
+            tvID = itemView.findViewById(R.id.tv_id_i);
+            tvName = itemView.findViewById(R.id.tv_name_i);
+            btnDelete = itemView.findViewById(R.id.btn_delete_i);
+            btnDetails = itemView.findViewById(R.id.btn_details_i);
         }
     }
 }

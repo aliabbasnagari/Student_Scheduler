@@ -6,16 +6,163 @@
     android:layout_height="match_parent"
     tools:context=".CourseActivity">
 
+    <LinearLayout
+        android:id="@+id/lyt_term_detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#816181"
+        android:orientation="vertical"
+        android:padding="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="3dp"
+            android:baselineAligned="false"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/rounded_8"
+                android:backgroundTint="#DBE0E4"
+                android:orientation="horizontal"
+                android:padding="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ID: " />
+
+                <TextView
+                    android:id="@+id/tv_id_t"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="-" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/rounded_8"
+                android:backgroundTint="#DBE0E4"
+                android:orientation="horizontal"
+                android:padding="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Title: " />
+
+                <EditText
+                    android:id="@+id/et_title_t"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/transparent"
+                    android:enabled="false"
+                    android:inputType="text"
+                    android:text="-"
+                    android:textColor="@color/dark_gray" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:theme="@style/FontColorDate">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Start Date"
+                    android:textColor="@color/deep_yellow"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tv_start_date_t"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="-" />
+            </LinearLayout>
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/sw_alert_start_t"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:drawableStart="@drawable/notifications_active_15"
+                android:enabled="false"
+                android:gravity="center" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="End Date"
+                    android:textColor="@color/deep_yellow"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tv_end_date_t"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="-" />
+            </LinearLayout>
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/sw_alert_end_t"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:drawableStart="@drawable/notifications_active_15"
+                android:enabled="false"
+                android:gravity="center" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_edit_t"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_weight="1"
+                android:text="Edit"
+                android:textSize="11sp"
+                app:backgroundTint="@color/blue_primary"
+                app:cornerRadius="10dp" />
+        </LinearLayout>
+    </LinearLayout>
+
     <TextView
         android:id="@+id/tv_top_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:text="Courses"
-        android:textSize="20sp"
+        android:text="Associated Courses"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/lyt_term_detail" />
 
     <TextView
         android:id="@+id/no_items"
@@ -45,14 +192,139 @@
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_top_label" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_top_label"
+        app:layout_constraintVertical_bias="0.0" />
 
-    <include
-        layout="@layout/add_course"
+    <LinearLayout
+        android:id="@+id/lyt_add_course"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        android:layout_margin="8dp"
+        android:background="@drawable/rounded_8"
+        android:backgroundTint="#D1E0EA"
+        android:orientation="vertical"
+        android:translationZ="5dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
+        <EditText
+            android:id="@+id/et_title_c"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:autofillHints="None"
+            android:background="@drawable/custom_input"
+            android:ems="10"
+            android:hint="Title"
+            android:inputType="text"
+            android:padding="10dp" />
+
+        <EditText
+            android:id="@+id/et_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:autofillHints="None"
+            android:background="@drawable/custom_input"
+            android:ems="10"
+            android:hint="Status"
+            android:inputType="text"
+            android:padding="10dp" />
+
+        <EditText
+            android:id="@+id/et_note"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:autofillHints="None"
+            android:background="@drawable/custom_input"
+            android:ems="10"
+            android:hint="Optional Note"
+            android:inputType="text"
+            android:padding="10dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/tv_start_date_c"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:drawablePadding="8dp"
+                android:gravity="center_vertical"
+                android:text="Start Date"
+                android:textSize="14sp"
+                app:drawableStartCompat="@drawable/calendar_20" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/sw_alert_start_c"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:drawableStart="@drawable/notifications_active_15"
+                android:gravity="center" />
+
+            <TextView
+                android:id="@+id/tv_end_date_c"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:drawablePadding="8dp"
+                android:gravity="center_vertical"
+                android:text="End Date"
+                android:textSize="14sp"
+                app:drawableStartCompat="@drawable/calendar_20" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/sw_alert_end_c"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:drawableStart="@drawable/notifications_active_15" />
+        </LinearLayout>
+
+        <LinearLayout
+            style="?android:attr/buttonBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_add_course"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:text="Add Course"
+                android:textColor="@color/white"
+                android:textSize="11sp"
+                app:backgroundTint="@color/blue_primary"
+                app:cornerRadius="10dp" />
+
+            <Button
+                android:id="@+id/btn_cancel"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="90dp"
+                android:layout_height="45dp"
+                android:layout_marginEnd="8dp"
+                android:text="Cancel"
+                android:textColor="@color/white"
+                android:textSize="11sp"
+                app:backgroundTint="@color/deep_red"
+                app:cornerRadius="10dp" />
+        </LinearLayout>
+
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
