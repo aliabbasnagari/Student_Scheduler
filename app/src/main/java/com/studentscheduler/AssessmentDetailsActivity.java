@@ -18,7 +18,9 @@ import java.util.Objects;
 
 public class AssessmentDetailsActivity extends AppCompatActivity {
 
-    private TextView tvStartDate, tvEndDate, tvId, tvType;
+    private TextView tvStartDate;
+    private TextView tvEndDate;
+    private TextView tvType;
     private Button btnEdit;
     private EditText etTitle;
     private SwitchCompat swStartAlert, swEndAlert;
@@ -29,7 +31,7 @@ public class AssessmentDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_assessment_details);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
-        tvId = findViewById(R.id.tv_id);
+        TextView tvId = findViewById(R.id.tv_id);
         etTitle = findViewById(R.id.et_title);
         tvStartDate = findViewById(R.id.tv_start_date);
         tvEndDate = findViewById(R.id.tv_end_date);
@@ -54,11 +56,12 @@ public class AssessmentDetailsActivity extends AppCompatActivity {
         }
 
         tvType.setOnClickListener(v -> {
+            String[] assessmentTypes = getResources().getStringArray(R.array.assessment_type);
             if (etTitle.isEnabled()) {
                 if (String.valueOf(tvType.getText()).equals("Performance"))
-                    tvType.setText("Objective");
+                    tvType.setText(assessmentTypes[0]);
                 else
-                    tvType.setText("Performance");
+                    tvType.setText(assessmentTypes[1]);
             }
         });
 
@@ -76,12 +79,12 @@ public class AssessmentDetailsActivity extends AppCompatActivity {
                 swStartAlert.setEnabled(true);
                 swEndAlert.setEnabled(true);
                 etTitle.requestFocus();
-                btnEdit.setText("Save");
+                btnEdit.setText(getString(R.string.save));
             } else {
                 etTitle.setEnabled(false);
                 swStartAlert.setEnabled(false);
                 swEndAlert.setEnabled(false);
-                btnEdit.setText("Edit");
+                btnEdit.setText(getString(R.string.edit));
                 DatabaseManager DB = new DatabaseManager(this);
                 int salt = (swStartAlert.isChecked()) ? 1 : 0;
                 int ealt = (swEndAlert.isChecked()) ? 1 : 0;
@@ -102,8 +105,8 @@ public class AssessmentDetailsActivity extends AppCompatActivity {
                         DateUtils.cancelAlarm(this, _aid + 50000);
                     else
                         DateUtils.scheduleAlarm(this, "Assessment Ended: " + assessment.getTitle(), _aid + 50000, edi);
-                    Toast.makeText(this, "Success Update!", Toast.LENGTH_SHORT).show();
-                } else Toast.makeText(this, "Failed!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.update_success), Toast.LENGTH_SHORT).show();
+                } else Toast.makeText(this, getString(R.string.failure), Toast.LENGTH_SHORT).show();
                 DB.close();
             }
         });
@@ -115,6 +118,7 @@ public class AssessmentDetailsActivity extends AppCompatActivity {
             if (b) chooseTime(this, edi, swEndAlert);
         });
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();

@@ -32,7 +32,6 @@ public class CourseDetailsActivity extends AppCompatActivity {
     private DatabaseManager DB;
     private String cid;
     private String chosenType;
-    private RadioGroup rgViewSelect;
     private RadioButton rdAssessments;
     private RadioButton rdInstructors;
     private RadioButton rdNotes;
@@ -43,7 +42,6 @@ public class CourseDetailsActivity extends AppCompatActivity {
     // Course
     private EditText etTitleC;
     private EditText etStatusC;
-    private TextView tvIdC;
     private TextView tvStartDateC;
     private TextView tvEndDateC;
     private SwitchCompat swStartAlertC;
@@ -51,12 +49,8 @@ public class CourseDetailsActivity extends AppCompatActivity {
     private Button btnEditC;
     // Assessment views
     private LinearLayout llAddAssessment;
-    private Button btnShowAssessment;
-    private Button btnAddAssessment;
-    private Button btnAddAssessmentCancel;
     private EditText etTitle;
     private TextView sDate, eDate;
-    private RadioGroup rgType;
     private ArrayList<Assessment> assessments;
     private AssessmentAdapter assessmentAdapter;
     private SwitchCompat swStartAlertA;
@@ -64,9 +58,6 @@ public class CourseDetailsActivity extends AppCompatActivity {
 
     // Instructor views
     private LinearLayout llAddInstructor;
-    private Button btnShowInstructor;
-    private Button btnAddInstructor;
-    private Button btnAddInstructorCancel;
     private EditText etName;
     private EditText etPhone;
     private EditText etEmail;
@@ -75,9 +66,6 @@ public class CourseDetailsActivity extends AppCompatActivity {
 
     // Instructor views
     private LinearLayout llAddNote;
-    private Button btnShowNote;
-    private Button btnAddNote;
-    private Button btnAddNoteCancel;
     private EditText etNote;
     private ArrayList<Note> notes;
     private NoteAdapter noteAdapter;
@@ -91,7 +79,7 @@ public class CourseDetailsActivity extends AppCompatActivity {
         Calendar sdi = Calendar.getInstance();
         Calendar edi = Calendar.getInstance();
 
-        rgViewSelect = findViewById(R.id.rg_group_view);
+        RadioGroup rgViewSelect = findViewById(R.id.rg_group_view);
         rvAIN = findViewById(R.id.rv_ain);
         rdAssessments = findViewById(R.id.rd_assessments);
         rdInstructors = findViewById(R.id.rd_instructors);
@@ -102,7 +90,7 @@ public class CourseDetailsActivity extends AppCompatActivity {
         // Course
         etTitleC = findViewById(R.id.et_title_c);
         etStatusC = findViewById(R.id.et_status_c);
-        tvIdC = findViewById(R.id.tv_id_c);
+        TextView tvIdC = findViewById(R.id.tv_id_c);
         tvStartDateC = findViewById(R.id.tv_start_date_c);
         tvEndDateC = findViewById(R.id.tv_end_date_c);
         swStartAlertC = findViewById(R.id.sw_alert_start_c);
@@ -135,13 +123,13 @@ public class CourseDetailsActivity extends AppCompatActivity {
                 swStartAlertC.setEnabled(true);
                 swEndAlertC.setEnabled(true);
                 etTitleC.requestFocus();
-                btnEditC.setText("Save");
+                btnEditC.setText(getString(R.string.save));
             } else {
                 etTitleC.setEnabled(false);
                 etStatusC.setEnabled(false);
                 swStartAlertC.setEnabled(false);
                 swEndAlertC.setEnabled(false);
-                btnEditC.setText("Edit");
+                btnEditC.setText(getString(R.string.edit));
                 int salt = (swStartAlertC.isChecked()) ? 1 : 0;
                 int ealt = (swEndAlertC.isChecked()) ? 1 : 0;
                 DatabaseManager DB = new DatabaseManager(this);
@@ -175,13 +163,13 @@ public class CourseDetailsActivity extends AppCompatActivity {
         });
 
         // Assessment
-        btnShowAssessment = findViewById(R.id.btn_showform_assessment);
-        btnAddAssessment = findViewById(R.id.btn_add_assessment);
-        btnAddAssessmentCancel = findViewById(R.id.btn_cancel_assessment);
+        Button btnShowAssessment = findViewById(R.id.btn_showform_assessment);
+        Button btnAddAssessment = findViewById(R.id.btn_add_assessment);
+        Button btnAddAssessmentCancel = findViewById(R.id.btn_cancel_assessment);
         etTitle = findViewById(R.id.et_title_a);
         sDate = findViewById(R.id.tv_start_date_a);
         eDate = findViewById(R.id.tv_end_date_a);
-        rgType = findViewById(R.id.rg_group_type);
+        RadioGroup rgType = findViewById(R.id.rg_group_type);
         llAddAssessment = findViewById(R.id.lyt_add_assessment);
         swStartAlertA = findViewById(R.id.sw_alert_start_a);
         swEndAlertA = findViewById(R.id.sw_alert_end_a);
@@ -190,9 +178,7 @@ public class CourseDetailsActivity extends AppCompatActivity {
         assessments = new ArrayList<>();
         assessmentAdapter = new AssessmentAdapter(this, assessments);
 
-        btnShowAssessment.setOnClickListener(v -> {
-            llAddAssessment.setVisibility(View.VISIBLE);
-        });
+        btnShowAssessment.setOnClickListener(v -> llAddAssessment.setVisibility(View.VISIBLE));
         btnAddAssessmentCancel.setOnClickListener(v -> showFAB(true, llAddAssessment));
 
         btnAddAssessment.setOnClickListener(v -> {
@@ -245,9 +231,9 @@ public class CourseDetailsActivity extends AppCompatActivity {
         });
 
         // Instructor
-        btnShowInstructor = findViewById(R.id.btn_showform_instructor);
-        btnAddInstructor = findViewById(R.id.btn_add_instructor);
-        btnAddInstructorCancel = findViewById(R.id.btn_cancel_instructor);
+        Button btnShowInstructor = findViewById(R.id.btn_showform_instructor);
+        Button btnAddInstructor = findViewById(R.id.btn_add_instructor);
+        Button btnAddInstructorCancel = findViewById(R.id.btn_cancel_instructor);
         etName = findViewById(R.id.et_iname);
         etPhone = findViewById(R.id.et_iphone);
         etEmail = findViewById(R.id.et_iemail);
@@ -282,9 +268,9 @@ public class CourseDetailsActivity extends AppCompatActivity {
 
         // Notes
         llAddNote = findViewById(R.id.lyt_add_note);
-        btnShowNote = findViewById(R.id.btn_showform_notes);
-        btnAddNote = findViewById(R.id.btn_add_note);
-        btnAddNoteCancel = findViewById(R.id.btn_cancel_note);
+        Button btnShowNote = findViewById(R.id.btn_showform_notes);
+        Button btnAddNote = findViewById(R.id.btn_add_note);
+        Button btnAddNoteCancel = findViewById(R.id.btn_cancel_note);
         etNote = findViewById(R.id.et_note);
 
         notes = new ArrayList<>();

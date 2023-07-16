@@ -1,7 +1,5 @@
 package com.studentscheduler;
 
-import android.widget.Toast;
-
 public class Term {
     private String TID;
     private String title;

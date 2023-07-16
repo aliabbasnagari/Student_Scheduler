@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder> {
     private final Context context;
-    private ArrayList<Note> notes;
+    private final ArrayList<Note> notes;
 
     public NoteAdapter(Context context, ArrayList<Note> notes) {
         this.context = context;
@@ -65,10 +65,10 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
 
     public static class NoteViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView tvID;
-        private TextView tvNote;
-        private Button btnDelete;
-        private Button btnShare;
+        private final TextView tvID;
+        private final TextView tvNote;
+        private final Button btnDelete;
+        private final Button btnShare;
 
         public NoteViewHolder(View itemView) {
             super(itemView);

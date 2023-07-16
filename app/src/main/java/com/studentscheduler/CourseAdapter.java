@@ -1,32 +1,20 @@
 package com.studentscheduler;
 
 import static com.studentscheduler.DateUtils.cancelAlarm;
-import static com.studentscheduler.DateUtils.chooseTime;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.PopupMenu;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.SwitchCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
-import java.util.Calendar;
 
 public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseViewHolder> {
     private final Context context;
@@ -43,30 +31,6 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
         View view = LayoutInflater.from(context).inflate(R.layout.term_viewer, parent, false);
         return new CourseViewHolder(view);
     }
-
-    private static void showPopupMenu(View view) {
-        PopupMenu popupMenu = new PopupMenu(view.getContext(), view);
-        MenuInflater inflater = popupMenu.getMenuInflater();
-        inflater.inflate(R.menu.cv_menu, popupMenu.getMenu());
-        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
-                int itemId = menuItem.getItemId();
-                switch (itemId) {
-                    case R.id.edit_details:
-                        // Handle edit action
-                        return true;
-                    case R.id.set_alarm:
-                        // Handle delete action
-                        return true;
-                    default:
-                        return false;
-                }
-            }
-        });
-        popupMenu.show();
-    }
-
 
     @Override
     public void onBindViewHolder(@NonNull CourseViewHolder holder, int position) {

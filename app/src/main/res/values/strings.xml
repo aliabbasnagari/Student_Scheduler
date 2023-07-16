@@ -1,3 +1,22 @@
 <resources>
     <string name="app_name">Student Scheduler</string>
+
+    <string name="label_id">ID: </string>
+    <string name="label_title">Title: </string>
+    <string name="label_type">Type: </string>
+    
+    <string name="label_details">Details</string>
+    <string name="label_start_date">Start Date</string>
+    <string name="label_end_date">End Date</string>
+    <string name="text_placeholder">-</string>
+
+    <string name="update_success">Updated successfully!</string>
+    <string name="delete_success">Deleted successfully!</string>
+    <string name="failure">Failed!</string>
+    <string name="save">Save</string>
+    <string name="edit">Edit</string>
+    <string-array name="assessment_type">
+        <item>Objective</item>
+        <item>Performance</item>
+    </string-array>
 </resources>

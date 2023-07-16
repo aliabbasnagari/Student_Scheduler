@@ -6,7 +6,6 @@ import static com.studentscheduler.DateUtils.chooseTime;
 import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,9 +32,12 @@ public class CourseActivity extends AppCompatActivity {
     private CourseAdapter courseAdapter;
     private FloatingActionButton fab;
     private EditText etTitleT, etTitleC, etStatus, etNote;
-    private TextView tvStartDateC, tvEndDateC, tvStartDateT, tvEndDateT, tvNoItems, tvIdT;
-    private Button btnAddCourse, btnCancel, btnEditT;
-    private RecyclerView rvCourses;
+    private TextView tvStartDateC;
+    private TextView tvEndDateC;
+    private TextView tvStartDateT;
+    private TextView tvEndDateT;
+    private TextView tvNoItems;
+    private Button btnEditT;
     private LinearLayout llAddCourse;
     private SwitchCompat swStartAlertT, swEndAlertT, swStartAlertC, swEndAlertC;
     private String tid = "0";
@@ -46,7 +48,10 @@ public class CourseActivity extends AppCompatActivity {
         setContentView(R.layout.activity_course);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
-        tvIdT = findViewById(R.id.tv_id_t);
+        TextView tvIdT = findViewById(R.id.tv_id_t);
+        Button btnAddCourse = findViewById(R.id.btn_add_course);
+        Button btnCancel = findViewById(R.id.btn_cancel);
+        RecyclerView rvCourses = findViewById(R.id.rv_courses);
         etTitleT = findViewById(R.id.et_title_t);
         etTitleC = findViewById(R.id.et_title_c);
         etStatus = findViewById(R.id.et_status);
@@ -56,9 +61,6 @@ public class CourseActivity extends AppCompatActivity {
         tvStartDateT = findViewById(R.id.tv_start_date_t);
         tvEndDateT = findViewById(R.id.tv_end_date_t);
         tvNoItems = findViewById(R.id.no_items);
-        btnAddCourse = findViewById(R.id.btn_add_course);
-        btnCancel = findViewById(R.id.btn_cancel);
-        rvCourses = findViewById(R.id.rv_courses);
         llAddCourse = findViewById(R.id.lyt_add_course);
         fab = findViewById(R.id.fab_add_course);
         swStartAlertT = findViewById(R.id.sw_alert_start_t);
@@ -169,12 +171,12 @@ public class CourseActivity extends AppCompatActivity {
                 swStartAlertT.setEnabled(true);
                 swEndAlertT.setEnabled(true);
                 etTitleT.requestFocus();
-                btnEditT.setText("Save");
+                btnEditT.setText(getString(R.string.save));
             } else {
                 etTitleT.setEnabled(false);
                 swStartAlertT.setEnabled(false);
                 swEndAlertT.setEnabled(false);
-                btnEditT.setText("Edit");
+                btnEditT.setText(getString(R.string.edit));
                 DatabaseManager DB = new DatabaseManager(this);
                 int salt = (swStartAlertT.isChecked()) ? 1 : 0;
                 int ealt = (swEndAlertT.isChecked()) ? 1 : 0;
@@ -194,8 +196,8 @@ public class CourseActivity extends AppCompatActivity {
                         DateUtils.cancelAlarm(this, _tid + 10000);
                     else
                         DateUtils.scheduleAlarm(this, "Term Ended: " + term.getTitle(), _tid + 10000, edi);
-                    Toast.makeText(this, "Success Update!", Toast.LENGTH_SHORT).show();
-                } else Toast.makeText(this, "Failed!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.update_success), Toast.LENGTH_SHORT).show();
+                } else Toast.makeText(this, getString(R.string.failure), Toast.LENGTH_SHORT).show();
                 DB.close();
             }
         });

@@ -16,6 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
+        android:baselineAligned="false"
         android:orientation="horizontal">
 
         <LinearLayout
@@ -30,13 +31,13 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="ID: " />
+                android:text="@string/label_id" />
 
             <TextView
                 android:id="@+id/tv_id"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="-" />
+                android:text="@string/text_placeholder" />
         </LinearLayout>
 
         <LinearLayout
@@ -51,16 +52,18 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Title: " />
+                android:labelFor="@id/et_title"
+                android:text="@string/label_title" />
 
             <EditText
                 android:id="@+id/et_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:autofillHints="name"
                 android:background="@color/transparent"
                 android:enabled="false"
                 android:inputType="text"
-                android:text="-"
+                android:text="@string/text_placeholder"
                 android:textColor="@color/dark_gray" />
         </LinearLayout>
     </LinearLayout>
@@ -81,7 +84,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Start Date"
+                android:labelFor="@id/tv_start_date"
+                android:text="@string/label_start_date"
                 android:textColor="@color/deep_yellow"
                 android:textSize="14sp" />
 
@@ -89,7 +93,7 @@
                 android:id="@+id/tv_start_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="-" />
+                android:text="@string/text_placeholder" />
         </LinearLayout>
 
         <androidx.appcompat.widget.SwitchCompat
@@ -110,7 +114,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="End Date"
+                android:labelFor="@id/tv_end_date"
+                android:text="@string/label_end_date"
                 android:textColor="@color/deep_yellow"
                 android:textSize="14sp" />
 
@@ -118,7 +123,7 @@
                 android:id="@+id/tv_end_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="-" />
+                android:text="@string/text_placeholder" />
         </LinearLayout>
 
         <androidx.appcompat.widget.SwitchCompat
@@ -140,7 +145,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Type: "
+            android:labelFor="@id/tv_type"
+            android:text="@string/label_type"
             android:textColor="@color/deep_yellow" />
 
         <TextView
@@ -149,7 +155,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
             android:layout_weight="1"
-            android:text="-" />
+            android:text="@string/text_placeholder" />
     </LinearLayout>
 
     <View
@@ -162,7 +168,7 @@
         android:id="@+id/btn_edit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Edit"
+        android:text="@string/edit"
         android:textSize="11sp"
         app:backgroundTint="@color/blue_primary"
         app:cornerRadius="10dp" />

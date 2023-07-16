@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,7 +16,7 @@ import java.util.ArrayList;
 
 public class InstructorAdapter extends RecyclerView.Adapter<InstructorAdapter.InstructorViewHolder> {
     private final Context context;
-    private ArrayList<Instructor> instructors;
+    private final ArrayList<Instructor> instructors;
 
     public InstructorAdapter(Context context, ArrayList<Instructor> instructors) {
         this.context = context;
@@ -44,8 +43,9 @@ public class InstructorAdapter extends RecyclerView.Adapter<InstructorAdapter.In
                 instructors.remove(position);
                 notifyItemRemoved(position);
                 notifyItemRangeChanged(position, instructors.size());
-                Toast.makeText(context, "Deleted!", Toast.LENGTH_SHORT).show();
-            } else Toast.makeText(context, "Failed!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, context.getString(R.string.delete_success), Toast.LENGTH_SHORT).show();
+            } else
+                Toast.makeText(context, context.getString(R.string.failure), Toast.LENGTH_SHORT).show();
             DB.close();
             ExtraUtils.updateNoItemsMessage(instructors, ((CourseDetailsActivity) context).findViewById(R.id.no_items));
         });
@@ -60,10 +60,10 @@ public class InstructorAdapter extends RecyclerView.Adapter<InstructorAdapter.In
 
     public static class InstructorViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView tvID;
-        private TextView tvName;
-        private Button btnDelete;
-        private Button btnDetails;
+        private final TextView tvID;
+        private final TextView tvName;
+        private final Button btnDelete;
+        private final Button btnDetails;
 
         public InstructorViewHolder(View itemView) {
             super(itemView);

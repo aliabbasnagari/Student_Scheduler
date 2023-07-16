@@ -73,17 +73,6 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/btn_details"
-                android:layout_width="0dp"
-                android:layout_height="45dp"
-                android:layout_marginEnd="8dp"
-                android:layout_weight="1"
-                android:text="Details"
-                android:textSize="11sp"
-                app:backgroundTint="@color/blue_primary"
-                app:cornerRadius="10dp" />
-
-            <Button
                 android:id="@+id/btn_delete"
                 android:layout_width="45dp"
                 android:layout_height="45dp"
@@ -93,6 +82,17 @@
                 app:iconGravity="textStart"
                 app:iconPadding="0dp"
                 app:tint="@color/white" />
+
+            <Button
+                android:id="@+id/btn_details"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:text="Details"
+                android:textSize="11sp"
+                app:backgroundTint="@color/blue_primary"
+                app:cornerRadius="10dp" />
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

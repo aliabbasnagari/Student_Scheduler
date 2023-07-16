@@ -6,7 +6,6 @@ import static com.studentscheduler.DateUtils.chooseTime;
 
 import android.app.PendingIntent;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -32,12 +31,9 @@ public class TermsActivity extends AppCompatActivity {
     private LinearLayout llAddTerm;
     private ArrayList<Term> terms;
     private TermAdapter termAdapter;
-    private RecyclerView rvTerms;
     private DatabaseManager DB;
     private EditText etTitle;
     private TextView sDate, eDate, noItems;
-    private Button btnAddTerm;
-    private Button btnCancel;
     private ImageView fab;
     private SwitchCompat swStartDate;
     private SwitchCompat swEndDate;
@@ -47,13 +43,13 @@ public class TermsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_terms);
 
-        rvTerms = findViewById(R.id.rv_terms);
+        RecyclerView rvTerms = findViewById(R.id.rv_terms);
         etTitle = findViewById(R.id.et_title);
         sDate = findViewById(R.id.tv_start_date);
         eDate = findViewById(R.id.tv_end_date);
         noItems = findViewById(R.id.no_items);
-        btnAddTerm = findViewById(R.id.btn_add_term);
-        btnCancel = findViewById(R.id.btn_cancel);
+        Button btnAddTerm = findViewById(R.id.btn_add_term);
+        Button btnCancel = findViewById(R.id.btn_cancel);
         llAddTerm = findViewById(R.id.lyt_add_term);
         fab = findViewById(R.id.fab_add_term);
         swStartDate = findViewById(R.id.sw_alert_start);
@@ -108,7 +104,7 @@ public class TermsActivity extends AppCompatActivity {
                 }
                 Toast.makeText(this, "Term Added!", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, "Failed!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.failure), Toast.LENGTH_SHORT).show();
             }
             DB.close();
             ExtraUtils.updateNoItemsMessage(terms, noItems);
